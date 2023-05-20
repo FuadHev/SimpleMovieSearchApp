@@ -46,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
 
+
+
         binding.searchView.setOnQueryTextListener(object :androidx.appcompat.widget.SearchView.OnQueryTextListener {
             @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -54,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (query.trim() != "") {
                     viewModel.searchMovie(query)
+
 
                     // test notification
                     val notification=NotificationCompat.Builder(this@MainActivity,CHANNEL_ID)

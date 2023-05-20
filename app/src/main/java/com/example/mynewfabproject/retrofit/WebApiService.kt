@@ -24,12 +24,6 @@ interface WebApiService {
     ): Response<MovieSearchResponse>
 
 
-    @GET("/")
-    suspend fun searchMovieError(
-        @Query("s") search: String,
-        @Query("r") format: String = "json",
-        @Query("page") page: Int = 1
-    ): Response<NotFoundResponse>
 
 
 //    @GET("/")

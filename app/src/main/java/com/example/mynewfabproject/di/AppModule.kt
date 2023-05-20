@@ -1,13 +1,16 @@
 package com.example.mynewfabproject.di
 
-import android.app.Application
 import com.example.mynewfabproject.repository.Repository
-import com.example.mynewfabproject.retrofit.ApiUtils
 import com.example.mynewfabproject.retrofit.WebApiService
+import com.example.mynewfabproject.utils.Constant
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -23,8 +26,23 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun getApiService(): WebApiService {
-        return ApiUtils.instance!!
+    fun getApiService(retrofit: Retrofit): WebApiService {
+        return retrofit.create(WebApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun getRetrofit():Retrofit{
+
+        val loggingInterceptor= HttpLoggingInterceptor()
+        loggingInterceptor.level= HttpLoggingInterceptor.Level.BODY
+
+        val clientBuilder= OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+
+       return Retrofit.Builder().baseUrl(Constant.BASE_URL)
+             .addConverterFactory(MoshiConverterFactory.create())
+             .client(clientBuilder)
+             .build()
     }
 
 

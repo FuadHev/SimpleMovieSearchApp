@@ -16,15 +16,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repo:Repository):ViewModel() {
     val moviesLiveData= MutableLiveData<List<Search>>()
-
     val errorLivedata=MutableLiveData<String>()
-
+    val isLoading=MutableLiveData<Boolean>()
     fun searchMovie(search_Title:String){
         viewModelScope.launch(Dispatchers.IO){
             val response=repo.searchMovie(search_Title)
+            isLoading.postValue(true)
             if (response.isSuccessful&&response.code()==200){
                 val  body=response.body()
-
+                isLoading.postValue(false)
                 // sende bu olmayacaq tekce else olan yeri yaz fso//else-nin icin
                 if(!body?.Response.toBoolean()){
                     if (response.isSuccessful){
